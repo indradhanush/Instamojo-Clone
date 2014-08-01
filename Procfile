@@ -1,0 +1,1 @@
+web: gunicorn instamojo.wsgi --log-file -
