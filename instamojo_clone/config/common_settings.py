@@ -1,5 +1,5 @@
 """
-Django settings for instamojo project.
+Django settings for instamojo_clone project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -42,9 +42,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'instamojo.urls'
+ROOT_URLCONF = 'instamojo_clone.urls'
 
-WSGI_APPLICATION = 'instamojo.wsgi.application'
+WSGI_APPLICATION = 'instamojo_clone.wsgi.application'
 
 
 # Database
