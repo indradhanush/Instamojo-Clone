@@ -4,9 +4,38 @@
 
 {% block content %}
 
+<div>
+  <h3>Welcome {{ username }}</h3>
+</div>
+
 
  <form class="custom" action="/logout/" method="POST">
    <input type="submit" value="Logout" class="button" />
  </form>
+
+ <section>
+
+<form class="custom" action="/new_product/" method="POST">
+   <div class="row">
+     <div class="small-4 small-centered columns">
+       <input type="text" id="title" name="title" placeholder="Title" />
+     </div>
+     <div class="small-4 small-centered columns">
+       <textarea id="description" name="description" placeholder="Description"></textarea>
+     </div>
+     <div class="small-4 small-centered columns">
+       <input type="text" id="currency" name="currency" value="INR" />
+     </div>
+     <div class="small-4 small-centered columns">
+       <input type="text" id="price" name="price" placeholder="Price" />
+     </div>
+     <div class="small-4 small-centered columns">
+       <input type="submit" value="Add" class="button" />
+     </div>
+   </div>
+</form>
+
+ </section>
+
 
 {% endblock %}

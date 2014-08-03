@@ -1,0 +1,25 @@
+{% extends "clone/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+<section>
+
+{%  for key, value in products.items %}
+  <li>{{ key }} {{ value.title}} {{ value.added_by}}
+{{value.description}} {{ value.price}} {{ value.currency}}</li>
+
+  <li>
+    <form class="custom" method="GET" action={{value.url}}>
+      <input type="submit" value="Check Out" class="button" />
+    </form>
+  </li>
+
+{% empty %}
+  <li>No Products.</li>
+{% endfor %}
+
+</section>
+
+{% endblock %}

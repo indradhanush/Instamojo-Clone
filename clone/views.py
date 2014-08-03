@@ -1,5 +1,5 @@
 # System imports
-
+import os
 
 # Django imports
 from django.shortcuts import (
@@ -25,6 +25,11 @@ from clone.common import (
     REPLY_KEY,
     USERNAME_KEY
 )
+from clone.models import Product
+from instamojo_clone.settings import REDIRECTION_URL
+
+# Instamojo API imports
+from instamojo import Instamojo
 
 
 @require_http_methods(["GET", "POST"])
@@ -108,5 +113,51 @@ def home(request):
     user = request.user
     context[USERNAME_KEY] = user.first_name or user.username
     return render(request, "clone/home.html", context)
+
+
+@csrf_exempt
+@login_required
+@require_http_methods(["POST"])
+def new_product(request):
+    title = request.POST.get("title", "")
+    description = request.POST.get("description", "")
+    price = request.POST.get("price", "")
+    currency = request.POST.get("currency", "")
+    api = Instamojo(api_key=os.environ["INSTAMOJO_KEY"],
+                    auth_token=os.environ["INSTAMOJO_SECRET"])
+    response = api.link_create(title=title, description=description,
+                               base_price=price, currency=currency,
+                               redirect_url=REDIRECTION_URL)
+
+    product = Product(username=request.user, title=title,
+                      description=description, currency=currency,
+                      base_price=price, url=response["link"]["url"],
+    )
+    product.save()
+    return redirect("/home/")
+
+
+def products(request):
+    products_list = Product.objects.filter(sold=False)
+    idx = 1
+    products_dict = {}
+    for prod in products_list:
+        product_detail = {}
+        product_detail["added_by"] = prod.username.username
+        product_detail["title"] = prod.title
+        product_detail["description"] = prod.description
+        product_detail["price"] = prod.base_price
+        product_detail["currency"] = prod.currency
+        product_detail["date_added"] = prod.date_added
+        product_detail["url"] = prod.url
+
+
+        products_dict[idx] = product_detail
+        idx += 1
+
+    context = {"products": products_dict}
+    return render(request, "clone/products.html", context)
+
+
 
 
