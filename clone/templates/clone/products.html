@@ -2,24 +2,46 @@
 
 {% load staticfiles %}
 
+{% block topbar %}
+
+    <ul class="left">
+      <li class="divider"></li>
+      <li><a href="/home/">Home</a></li>
+      <li class="divider"></li>
+      <li class="active"><a href="/products/">Products</a></li>
+    </ul>
+
+{% endblock %}
+
+
 {% block content %}
 
 <section>
-
-{%  for key, value in products.items %}
-  <li>{{ key }} {{ value.title}} {{ value.added_by}}
-{{value.description}} {{ value.price}} {{ value.currency}}</li>
-
-  <li>
-    <form class="custom" method="GET" action={{value.url}}>
-      <input type="submit" value="Check Out" class="button" />
-    </form>
-  </li>
-
-{% empty %}
-  <li>No Products.</li>
-{% endfor %}
-
+  <div class="row">
+    <div class="panel radius">
+      <div class="row collapsed small-4 small-offset-3 small-centered columns">
+        <h2>Products on Instamojo Clone</h2>
+      </div>
+    </div>
+    <div class="small-12 columns">
+      <ul class="small-block-grid-3">
+        {%  for product in products %}
+        <li>
+          <ul class="pricing-table">
+            <li class="title">{{ product.title }}</li>
+            <li class="price">{{ product.currency }}&nbsp;{{ product.price }}</li>
+            <li class="description">{{ product.description }}</li>
+            <li class="bullet-item">Owned by&nbsp;{{ product.added_by }}</li>
+            <li class="bullet-item">Added on&nbsp;{{ product.date_added }}</li>
+            <li class="cta-button"><a class="button" href={{ product.url }}>Check it out!</a></li>
+          </ul>
+        </li>
+        {% empty %}
+        <li>No Products.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 </section>
 
 {% endblock %}

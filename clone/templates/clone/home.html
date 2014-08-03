@@ -2,40 +2,59 @@
 
 {% load staticfiles %}
 
+{% block topbar %}
+
+    <ul class="left">
+      <li class="divider"></li>
+      <li class="active"><a href="/home/">Home</a></li>
+      <li class="divider"></li>
+      <li><a href="/products/">Products</a></li>
+    </ul>
+
+{% endblock %}
+
 {% block content %}
 
-<div>
-  <h3>Welcome {{ username }}</h3>
-</div>
+{% if payment_info %}
+<section>
+  {% for k, v in payment_info.items %}
+    {{ k }}
+  {% endfor %}
+</section>
+{% endif %}
 
-
- <form class="custom" action="/logout/" method="POST">
-   <input type="submit" value="Logout" class="button" />
- </form>
-
- <section>
-
-<form class="custom" action="/new_product/" method="POST">
-   <div class="row">
-     <div class="small-4 small-centered columns">
-       <input type="text" id="title" name="title" placeholder="Title" />
-     </div>
-     <div class="small-4 small-centered columns">
-       <textarea id="description" name="description" placeholder="Description"></textarea>
-     </div>
-     <div class="small-4 small-centered columns">
-       <input type="text" id="currency" name="currency" value="INR" />
-     </div>
-     <div class="small-4 small-centered columns">
-       <input type="text" id="price" name="price" placeholder="Price" />
-     </div>
-     <div class="small-4 small-centered columns">
-       <input type="submit" value="Add" class="button" />
-     </div>
-   </div>
-</form>
-
- </section>
-
+<section>
+  <div class="row">
+    <div class="panel radius">
+      <div class="row collapsed small-4 small-offset-3 small-centered columns">
+        <h2>Add a product on Instamojo Clone</h2>
+      </div>
+    </div>
+    <div class="small-10 small-centered columns">
+      <form class="custom" action="/new_product/" method="POST">
+        <div class="row">
+          <div class="small-6 small-centered columns">
+            <input type="text" id="title" name="title" placeholder="Title" />
+          </div>
+          <div class="small-6 small-centered columns">
+            <textarea id="description" name="description" placeholder="Description"></textarea>
+          </div>
+          <div class="small-6 small-centered columns">
+            <select id="currency" name="currency" class="medium">
+              <option DISABLED>USD</option>
+              <option>INR</option>
+            </select>
+          </div>
+          <div class="small-6 small-centered columns">
+            <input type="text" id="price" name="price" placeholder="Price" />
+          </div>
+          <div class="small-6 small-centered columns">
+            <input type="submit" value="Add it!" class="button expand" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
 
 {% endblock %}

@@ -23,13 +23,21 @@ from clone.common import (
     LOGOUT_SUCCESS,
     USER_NOT_ACTIVE,
     REPLY_KEY,
-    USERNAME_KEY
+    USERNAME_KEY,
+    PRODUCT_ADD_SUCCESS,
+    PRODUCT_BUY_SUCCESS,
+    PRODUCT_BUY_FAIL
 )
 from clone.models import Product
 from instamojo_clone.settings import REDIRECTION_URL
 
 # Instamojo API imports
 from instamojo import Instamojo
+
+
+def prepare_api_request():
+    return Instamojo(api_key=os.environ["INSTAMOJO_KEY"],
+                     auth_token=os.environ["INSTAMOJO_SECRET"])
 
 
 @require_http_methods(["GET", "POST"])
@@ -93,7 +101,6 @@ def login_user(request):
     return redirect(redirect_to)
 
 
-
 @csrf_exempt
 @login_required
 @require_http_methods(["POST"])
@@ -134,13 +141,13 @@ def new_product(request):
                       base_price=price, url=response["link"]["url"],
     )
     product.save()
+    messages.add_message(request, messages.SUCCESS, PRODUCT_ADD_SUCCESS)
     return redirect("/home/")
 
 
 def products(request):
     products_list = Product.objects.filter(sold=False)
-    idx = 1
-    products_dict = {}
+    all_products = []
     for prod in products_list:
         product_detail = {}
         product_detail["added_by"] = prod.username.username
@@ -151,13 +158,36 @@ def products(request):
         product_detail["date_added"] = prod.date_added
         product_detail["url"] = prod.url
 
+        all_products.append(product_detail)
 
-        products_dict[idx] = product_detail
-        idx += 1
-
-    context = {"products": products_dict}
+    context = {"products": all_products}
     return render(request, "clone/products.html", context)
 
 
+@login_required
+@require_http_methods(["GET"])
+def payment_success(request):
+    context = {}
+    payment_id = request.GET.get("payment_id", "")
+    if payment_id:
+        # Redirected here after a checkout.
+        api = prepare_api_request()
+        payment_info = api.payment_detail(payment_id)
+        payment = payment_info["payment"]
+        filter_list = []
 
+        for key, value in payment.items():
+            if payment.get(key):
+                filter_list.append((key, value))
 
+        context["payment"] = filter_list
+        if payment_info["success"]:
+            message_level = messages.SUCCESS
+            msg = PRODUCT_BUY_SUCCESS
+        else:
+            message_level = messages.ERROR
+            msg = PRODUCT_BUY_FAIL
+
+        messages.add_message(request, message_level, msg)
+
+    return render(request, "clone/success.html",  context)

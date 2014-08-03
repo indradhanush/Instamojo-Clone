@@ -1,0 +1,42 @@
+{% extends "clone/base.html" %}
+
+{% load staticfiles %}
+
+{% block topbar %}
+
+    <ul class="left">
+      <li class="divider"></li>
+      <li><a href="/home/">Home</a></li>
+      <li class="divider"></li>
+      <li><a href="/products/">Products</a></li>
+    </ul>
+
+{% endblock %}
+
+
+{% block content %}
+    <section>
+      <div class="row">
+        <div class="panel radius small-6 small-centered columns">
+          <div class="row collapsed small-6">
+            <h2>&nbsp;Product payment information</h2>
+            </div>
+          </div>
+        </div>
+        <div class="small-4 small-centered columns">
+          <table>
+            <tr>
+              <th width="200">Type</th>
+              <th width="200">Info</th>
+            </tr>
+            {% for item in payment %}
+              <tr>
+                <td>{{ item.0 }}</td>
+                <td>{{ item.1 }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </section>
+{% endblock %}

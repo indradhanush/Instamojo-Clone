@@ -2,47 +2,71 @@
 
 {% load staticfiles %}
 
+{% block topbar %}
+
+    <ul class="left">
+      <li class="divider"></li>
+      <li><a href="/home/">Home</a></li>
+      <li class="divider"></li>
+      <li><a href="/products/">Products</a></li>
+    </ul>
+
+{% endblock %}
+
 {% block content %}
 
 <section>
-
-  <form class="custom" action="/login/" method="POST">
-    <div class="row">
-      <h3>Sign in</h3>
-      <div class="small-4 small-centered columns">
-        <input type="email" id="username" name="username" placeholder="You@email.com">
-      </div>
-      <div class="small-4 small-centered columns">
-        <input type="password" id="password" name="password"
-               placeholder="Your super secret password!">
-      </div>
-      <div class="small-4 small-centered columns">
-        <input type="submit" value="submit" class="button">
+    <div class="row" style="margin-top:200px">
+      <div class="small-12 columns">
+        <div class="small-4 small-offset-1 columns">
+          <a href="#" data-reveal-id="sign-in-modal" class="button medium expand radius">Existing User? Sign In</a>
+        </div>
+        <div class="small-4 small-offset-2 columns end">
+          <a href="#" data-reveal-id="sign-up-modal" class="button medium expand radius">New User? Sign Up</a>
+        </div>
       </div>
     </div>
-  </form>
 
-  <div class="row">
-    <h3>I'm new here. Sign me up!    {{ reply }}</h3>
-
-    <form class="custom" action="/register/" method="POST">
-      <div class="row">
-        <h3>Sign in</h3>
-        <div class="small-4 small-centered columns">
-          <input class="error" type="email" id="username" name="username" placeholder="You@email.com">
+    <div id="sign-in-modal" class="reveal-modal medium" data-reveal>
+      <form data-abide class="custom" action="/login/" method="POST">
+        <div class="row">
+          <h3>Sign In</h3>
+          <div class="small-6 small-centered columns">
+            <input type="email" required id="username" name="username" placeholder="You@email.com">
+            <small class="error">An email address is required.</small>
+          </div>
+          <div class="small-6 small-centered columns">
+            <input type="password" required id="password" name="password"
+                   placeholder="Your super secret password!">
+            <small class="error">A password is required.</small>
+          </div>
+          <div class="small-6 small-centered columns">
+            <input type="submit" value="Sign In" class="medium button radius expand">
+          </div>
         </div>
-        <div class="small-4 small-centered columns">
-          <input type="password" id="password" name="password"
-                 placeholder="Your super secret password!">
-        </div>
-        <div class="small-4 small-centered columns">
-          <input type="submit" value="submit" class="button">
-        </div>
-      </div>
-    </form>
+      </form>
+      <a class="close-reveal-modal">&#215;</a>
+    </div>
 
-  </div>
-
+    <div id="sign-up-modal" class="reveal-modal medium" data-reveal>
+      <form data-abide class="custom" action="/register/" method="POST">
+        <div class="row">
+          <h3>Sign Up</h3>
+          <div class="small-6 small-centered columns">
+            <input type="email" required id="username" name="username" placeholder="You@email.com">
+            <small class="error">An email address is required.</small>
+          </div>
+          <div class="small-6 small-centered columns">
+            <input type="password" required id="password" name="password"
+                   placeholder="Your super secret password!">
+            <small class="error">A password is required.</small>
+          </div>
+          <div class="small-6 small-centered columns">
+            <input type="submit" value="Sign In" class="medium button radius expand">
+          </div>
+        </div>
+      </form>
+    </div>
 </section>
 
 {% endblock %}
