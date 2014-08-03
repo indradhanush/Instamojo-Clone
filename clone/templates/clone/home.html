@@ -1,0 +1,12 @@
+{% extends "clone/base.html" %}
+
+{% load staticfiles %}
+
+{% block content %}
+
+
+ <form class="custom" action="/logout/" method="POST">
+   <input type="submit" value="Logout" class="button" />
+ </form>
+
+{% endblock %}
