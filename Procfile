@@ -1,1 +1,1 @@
-web: gunicorn instamojo.wsgi --log-file -
+web: gunicorn instamojo_clone.wsgi --log-file -
