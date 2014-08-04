@@ -1,5 +1,6 @@
-# System imports
-import os
+"""
+Views for the app clone.
+"""
 
 # Third party imports
 import requests
@@ -29,7 +30,6 @@ from clone.common import (
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     USER_NOT_ACTIVE,
-    REPLY_KEY,
     USERNAME_KEY,
     PRODUCT_ADD_SUCCESS,
     PRODUCT_BUY_SUCCESS,
@@ -39,11 +39,6 @@ from clone.common import (
 )
 from clone.models import Product
 from instamojo_clone.settings import REDIRECTION_URL
-
-
-def prepare_api_request():
-    return Instamojo(api_key=os.environ["INSTAMOJO_KEY"],
-                     auth_token=os.environ["INSTAMOJO_SECRET"])
 
 
 @require_http_methods(["GET", "POST"])
@@ -122,6 +117,9 @@ def logout_user(request):
 @login_required
 @require_http_methods(["GET", "POST"])
 def home(request):
+    """
+    Default view for a logged in user.
+    """
     context = {}
     user = request.user
     context[USERNAME_KEY] = user.first_name or user.username
@@ -132,6 +130,9 @@ def home(request):
 @login_required
 @require_http_methods(["POST"])
 def new_product(request):
+    """
+    View to handle requests for adding a new product.
+    """
     payload = {}
     payload["title"] = request.POST.get("title", "")
     payload["description"] = request.POST.get("description", "")
@@ -156,6 +157,9 @@ def new_product(request):
 
 
 def products(request):
+    """
+    View to list all the products on the site.
+    """
     products_list = Product.objects.filter(sold=False).order_by("-date_added")
     all_products = []
     for prod in products_list:
@@ -177,6 +181,10 @@ def products(request):
 @login_required
 @require_http_methods(["GET"])
 def payment_success(request):
+    """
+    View to handle redirects after a product is bought on the instamojo
+    website.
+    """
     context = {}
     payment_id = request.GET.get("payment_id", "")
     if payment_id:

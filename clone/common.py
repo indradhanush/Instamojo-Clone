@@ -18,7 +18,6 @@ USER_NOT_ACTIVE = "You account has been disabled. Contact the admin."
 
 
 # Context keys
-REPLY_KEY = "reply"
 USERNAME_KEY = "username"
 
 PRODUCT_ADD_SUCCESS = "The product was added successfully."
