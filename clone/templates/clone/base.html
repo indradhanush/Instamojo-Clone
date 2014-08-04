@@ -24,7 +24,7 @@
         <ul class="right">
           <li class="divider"></li>
           {% if user.username %}
-            <li><a href="/profile/">{{ user.first_name|default:user.username }}</a></li>
+            <li><a href="#">Welcome {{ user.first_name|default:user.username }}</a></li>
             <li class="divider"></li>
             <li class="has-form">
               <form action="/logout/" method="POST">
