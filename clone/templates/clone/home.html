@@ -34,21 +34,24 @@
       <form data-abide class="custom" action="/new_product/" method="POST">
         <div class="row">
           <div class="small-6 small-centered columns">
-            <input type="text" required pattern="alpha" id="title" name="title" placeholder="Title" />
+            <input type="text" id="title" name="title"
+            placeholder="Title" required />
             <small class="error">Title is required.</small>
           </div>
           <div class="small-6 small-centered columns">
-            <textarea id="description" required name="description" placeholder="Description"></textarea>
+            <textarea id="description" name="description"
+            placeholder="Description" required></textarea>
             <small class="error">Description is required.</small>
           </div>
           <div class="small-6 small-centered columns">
-            <select id="currency" name="currency" class="medium">
+            <select id="currency" name="currency" class="medium" required>
               <option DISABLED>USD</option>
               <option>INR</option>
             </select>
           </div>
           <div class="small-6 small-centered columns">
-            <input type="text" required pattern="number" id="price" name="price" placeholder="Price" />
+            <input type="text" pattern="number" id="price"
+            name="price" placeholder="Price" required />
             <small class="error">You must provide a price.</small>
           </div>
           <div class="small-6 small-centered columns">

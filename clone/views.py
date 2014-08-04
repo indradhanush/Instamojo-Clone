@@ -1,6 +1,13 @@
 # System imports
 import os
 
+# Third party imports
+import requests
+try:
+    import simplejson as json
+except ImportError:
+    import json
+
 # Django imports
 from django.shortcuts import (
     render,
@@ -26,13 +33,12 @@ from clone.common import (
     USERNAME_KEY,
     PRODUCT_ADD_SUCCESS,
     PRODUCT_BUY_SUCCESS,
-    PRODUCT_BUY_FAIL
+    PRODUCT_BUY_FAIL,
+    INSTAMOJO_BASE_URL,
+    create_headers
 )
 from clone.models import Product
 from instamojo_clone.settings import REDIRECTION_URL
-
-# Instamojo API imports
-from instamojo import Instamojo
 
 
 def prepare_api_request():
@@ -126,27 +132,31 @@ def home(request):
 @login_required
 @require_http_methods(["POST"])
 def new_product(request):
-    title = request.POST.get("title", "")
-    description = request.POST.get("description", "")
-    price = request.POST.get("price", "")
-    currency = request.POST.get("currency", "")
-    api = Instamojo(api_key=os.environ["INSTAMOJO_KEY"],
-                    auth_token=os.environ["INSTAMOJO_SECRET"])
-    response = api.link_create(title=title, description=description,
-                               base_price=price, currency=currency,
-                               redirect_url=REDIRECTION_URL)
+    payload = {}
+    payload["title"] = request.POST.get("title", "")
+    payload["description"] = request.POST.get("description", "")
+    payload["base_price"] = request.POST.get("price", "")
+    payload["currency"] = request.POST.get("currency", "")
+    payload["redirect_url"] = REDIRECTION_URL
 
-    product = Product(username=request.user, title=title,
-                      description=description, currency=currency,
-                      base_price=price, url=response["link"]["url"],
-    )
+    headers = create_headers()
+    endpoint = "{0}links/".format(INSTAMOJO_BASE_URL)
+    response = requests.post(endpoint, headers=headers, data=payload)
+    response_body = json.loads(response.text)
+
+    product = Product(username=request.user, title=payload["title"],
+                      description=payload["description"],
+                      currency=payload["currency"],
+                      base_price=payload["base_price"],
+                      url=response_body["link"]["url"]
+                  )
     product.save()
     messages.add_message(request, messages.SUCCESS, PRODUCT_ADD_SUCCESS)
     return redirect("/home/")
 
 
 def products(request):
-    products_list = Product.objects.filter(sold=False)
+    products_list = Product.objects.filter(sold=False).order_by("-date_added")
     all_products = []
     for prod in products_list:
         product_detail = {}
@@ -171,8 +181,10 @@ def payment_success(request):
     payment_id = request.GET.get("payment_id", "")
     if payment_id:
         # Redirected here after a checkout.
-        api = prepare_api_request()
-        payment_info = api.payment_detail(payment_id)
+        endpoint = "{0}payments/{1}".format(INSTAMOJO_BASE_URL, payment_id)
+        headers = create_headers()
+        response = requests.get(endpoint, headers=headers)
+        payment_info = json.loads(response.text)
         payment = payment_info["payment"]
         filter_list = []
 

@@ -5,8 +5,8 @@ dj-database-url==0.3.0
 dj-static==0.0.6
 django-toolbelt==0.0.1
 gunicorn==19.1.0
-https://github.com/Instamojo/instamojo-py/archive/master.zip
 psycopg2==2.5.3
 requests==2.3.0
+simplejson==3.6.0
 static3==0.5.1
 wsgiref==0.1.2

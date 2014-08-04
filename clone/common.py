@@ -1,4 +1,9 @@
-# Common variables and utilities.
+"""
+Common variables and utilities.
+"""
+
+# System imports
+import os
 
 
 # Reply messages.
@@ -19,3 +24,17 @@ USERNAME_KEY = "username"
 PRODUCT_ADD_SUCCESS = "The product was added successfully."
 PRODUCT_BUY_SUCCESS = "Congratulations! You bought the product!"
 PRODUCT_BUY_FAIL = "Sorry. Something went wrong with that payment."
+
+INSTAMOJO_BASE_URL = "https://www.instamojo.com/api/1.1/"
+
+def create_headers():
+    """
+    Simple wrapper to create auth headers.
+
+    :return: Authentication Headers.
+    :rtype: dict
+    """
+    return {
+        "X-Api-Key": os.environ["INSTAMOJO_KEY"],
+        "X-Auth-Token": os.environ["INSTAMOJO_SECRET"]
+    }
