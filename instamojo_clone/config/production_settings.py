@@ -22,4 +22,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-REDIRECTION_URL = ""
+REDIRECTION_URL = "http://instamojo-clone.herokuapp.com/payment_success/"
+
+# Dirty hack for collectstatic to work.
+BASE_DIR = "/app/instamojo_clone/"
