@@ -35,6 +35,14 @@ from clone.common import (
     PRODUCT_BUY_SUCCESS,
     PRODUCT_BUY_FAIL,
     INSTAMOJO_BASE_URL,
+    TITLE_KEY,
+    DESCRIPTION_KEY,
+    PRICE_KEY,
+    CURRENCY_KEY,
+    REDIRECT_URL_KEY,
+    ADDED_BY_KEY,
+    DATE_ADDED_KEY,
+    URL_KEY,
     create_headers
 )
 from clone.models import Product
@@ -134,21 +142,21 @@ def new_product(request):
     View to handle requests for adding a new product.
     """
     payload = {}
-    payload["title"] = request.POST.get("title", "")
-    payload["description"] = request.POST.get("description", "")
-    payload["base_price"] = request.POST.get("price", "")
-    payload["currency"] = request.POST.get("currency", "")
-    payload["redirect_url"] = REDIRECTION_URL
+    payload[TITLE_KEY] = request.POST.get(TITLE_KEY, "")
+    payload[DESCRIPTION_KEY] = request.POST.get(DESCRIPTION_KEY, "")
+    payload[PRICE_KEY] = request.POST.get("price", "")
+    payload[CURRENCY_KEY] = request.POST.get(CURRENCY_KEY, "")
+    payload[REDIRECT_URL_KEY] = REDIRECTION_URL
 
     headers = create_headers()
     endpoint = "{0}links/".format(INSTAMOJO_BASE_URL)
     response = requests.post(endpoint, headers=headers, data=payload)
     response_body = json.loads(response.text)
 
-    product = Product(username=request.user, title=payload["title"],
-                      description=payload["description"],
-                      currency=payload["currency"],
-                      base_price=payload["base_price"],
+    product = Product(username=request.user, title=payload[TITLE_KEY],
+                      description=payload[DESCRIPTION_KEY],
+                      currency=payload[CURRENCY_KEY],
+                      base_price=payload[PRICE_KEY],
                       url=response_body["link"]["url"]
                   )
     product.save()
@@ -165,13 +173,13 @@ def products(request):
     all_products = []
     for prod in products_list:
         product_detail = {}
-        product_detail["added_by"] = prod.username.username
-        product_detail["title"] = prod.title
-        product_detail["description"] = prod.description
+        product_detail[ADDED_BY_KEY] = prod.username.username
+        product_detail[TITLE_KEY] = prod.title
+        product_detail[DESCRIPTION_KEY] = prod.description
         product_detail["price"] = prod.base_price
-        product_detail["currency"] = prod.currency
-        product_detail["date_added"] = prod.date_added
-        product_detail["url"] = prod.url
+        product_detail[CURRENCY_KEY] = prod.currency
+        product_detail[DATE_ADDED_KEY] = prod.date_added
+        product_detail[URL_KEY] = prod.url
 
         all_products.append(product_detail)
 

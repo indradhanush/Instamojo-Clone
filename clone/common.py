@@ -20,6 +20,16 @@ USER_NOT_ACTIVE = "You account has been disabled. Contact the admin."
 # Context keys
 USERNAME_KEY = "username"
 
+TITLE_KEY = "title"
+DESCRIPTION_KEY = "description"
+PRICE_KEY = "base_price"
+CURRENCY_KEY = "currency"
+REDIRECT_URL_KEY = "redirect_url"
+
+ADDED_BY_KEY = "added_by"
+DATE_ADDED_KEY = "date_added"
+URL_KEY = "url"
+
 PRODUCT_ADD_SUCCESS = "The product was added successfully."
 PRODUCT_BUY_SUCCESS = "Congratulations! You bought the product!"
 PRODUCT_BUY_FAIL = "Sorry. Something went wrong with that payment."
