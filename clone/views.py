@@ -156,6 +156,7 @@ def new_product(request):
     return redirect("/home/")
 
 
+@login_required
 def products(request):
     """
     View to list all the products on the site.
